@@ -12,15 +12,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cupon {
 
+public class Cupon {
+    
     @Id
-    @Column(length = 25, nullable = false, unique = true)
+    @Column( length= 25, nullable = true)
     private String codigo;
 
-    @Column(nullable = false, precision = 5, scale = 2)
+    @Column(nullable = false)
     private BigDecimal descuento;
 
     @Column(nullable = false)
     private Boolean activo;
+    
+    
+    
 }

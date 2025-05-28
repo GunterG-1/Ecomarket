@@ -11,7 +11,7 @@ public class VentaClient {
     private RestTemplate restTemplate;
 
     public VentaDTO obtenerVentaPorId(Long idVenta) {
-        String url = "http://localhost:8083/api/ventas/" + idVenta;
+        String url = "http://localhost:808/api/ventas/" + idVenta;
         return restTemplate.getForObject(url, VentaDTO.class);
     }
 
