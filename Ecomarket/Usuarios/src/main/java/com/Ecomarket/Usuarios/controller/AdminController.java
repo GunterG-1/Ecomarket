@@ -22,7 +22,7 @@ public class AdminController {
     private RolRepository rolRepository;
 
     // Listar todos los usuarios
-    @GetMapping
+    @GetMapping("/listar")
     public List<Usuario> listarUsuarios() {
         return adminService.listarUsuarios();
     }
