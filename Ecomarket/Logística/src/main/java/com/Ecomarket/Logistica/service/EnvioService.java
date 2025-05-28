@@ -19,13 +19,12 @@ public class EnvioService {
     @Autowired
     private EnvioRepository envioRepository;
 
-
     public List<Envio> listarEnvios() {
         return envioRepository.findAll();
     }
 
-    public Optional<Envio> obtenerEnvio(Long id) {
-        return envioRepository.findById(id);
+    public Optional<Envio> obtenerEnvio(Long idVenta) {
+        return envioRepository.findById(idVenta);
     }
 
     public List<Envio> buscarPorEstado(String estado) {
@@ -34,20 +33,20 @@ public class EnvioService {
 
     public List<Envio> buscarPorDestino(String destino) {
         return envioRepository.findByDestino(destino);
-
     }
-      public Envio findById(Long id) {
-        return envioRepository.findById(id).orElse(null);
+
+    public Envio findById(Long idVenta) {
+        return envioRepository.findById(idVenta).orElse(null);
     }
 
     public Envio save(Envio envio) {
-        // Cuando crees o actualices un Envio, usa:
-        envio.setFechaEnvio(LocalDate.now().toString());
-        envio.setFechaEntregaEstimada(LocalDate.now().plusDays(3).toString());
+        envio.setFechaEnvio(LocalDate.now());
+        envio.setFechaEntregaEstimada(LocalDate.now().plusDays(3));
         return envioRepository.save(envio);
     }
 
     public void delete(Long id) {
         envioRepository.deleteById(id);
     }
+    
 }

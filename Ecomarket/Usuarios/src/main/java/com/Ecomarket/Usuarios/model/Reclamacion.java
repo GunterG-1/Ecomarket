@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Date;
 
 @Entity
 @Table(name = "reclamacion")
@@ -14,20 +15,21 @@ public class Reclamacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idReclamos;
 
-    @Column(unique = true,length = 100,nullable = false)
+    @Column(length = 100, nullable = false)
     private String asunto;
 
-    @Column(unique = true,length = 200,nullable = false)
+    @Column(length = 200, nullable = false)
     private String mensaje;
 
-    @Column (nullable = true)
-    private String fechaReclamo;
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE) // Solo guarda la fecha, sin hora
+    private Date fechaReclamo;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Usuario cliente;
+    @JoinColumn(name = "idUsuario")
+    private Usuario usuario;
 
     private String estado;
 }

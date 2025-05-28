@@ -4,31 +4,33 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
 
 @Entity
-@Table (name = "producto")
+@Table(name = "producto")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idProducto;
 
-    @Column (nullable=false, unique = true)
+    @Column(nullable = false, unique = true, length = 100)
     private String nombreProducto;
 
-    @Column (nullable=false, unique=true)
-    private int codigo;
+    @Column(nullable = false, unique = true, length = 50)
+    private String codigo;
 
-    @Column (unique = true, length = 100, nullable=false)
+    @Column(nullable = false, length = 255)
     private String descripcionProducto;
 
-    @Column (nullable = false)
-    private int preciUnitario;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal precioUnitario;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private int stock;
-    private String categoria;
 
+    @Column(length = 50)
+    private String categoria;
 }

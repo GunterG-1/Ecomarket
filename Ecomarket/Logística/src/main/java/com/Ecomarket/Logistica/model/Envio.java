@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Table (name = "envio")
 @Data
@@ -17,32 +19,35 @@ public class Envio {
     
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+private Long idEnvio;
 
-@Column(unique = true, length = 25, nullable = false)
+@Column(length = 25, nullable = false)
 private String origen;
 
-@Column(unique = true,length = 25,nullable = false)
-private String nom_usuario;
+@Column(length = 25, nullable = false)
+private String nombreUsuario;
 
-@Column(unique = false,length = 25,nullable = false)
-private String ap_usuario; 
+@Column(length = 25, nullable = false)
+private String apellidoUsuario;
 
-@Column(unique = false,length = 25,nullable=true)
-private String dir_usuario;
+@Column(length = 100, nullable = true)
+private String dirUsuario;
 
-@Column(unique = true,length = 50,nullable = false)
-private String email_Usuario;
+@Column(length = 50, nullable = false, unique = true)
+private String correo;
 
-@Column(unique = false, length = 20, nullable = false)
+@Column(length = 20, nullable = false)
 private String estado; 
 
-@Column(unique = false, length = 20, nullable = false)
+@Column(length = 20, nullable = false)
 private String destino;
 
-@Column (nullable = true)   
-private String fechaEnvio;
+@Column(nullable = true)
+private LocalDate fechaEnvio;
 
-@Column (nullable = true)
-private String fechaEntregaEstimada;
+@Column(nullable = true)
+private LocalDate fechaEntregaEstimada;
+
+@Column(length = 50, nullable = false)
+private String nombreProducto;
 }

@@ -1,62 +1,69 @@
 package com.Ecomarket.Usuarios.service;
 
-import java.util.List;
-
+import com.Ecomarket.Usuarios.model.Rol;
+import com.Ecomarket.Usuarios.model.Usuario;
+import com.Ecomarket.Usuarios.repository.RolRepository;
+import com.Ecomarket.Usuarios.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.Ecomarket.Usuarios.model.Usuario;
-
-import com.Ecomarket.Usuarios.repository.UsuarioRepository;
-
-import jakarta.transaction.Transactional;
+import java.util.List;
 
 @Service
-@Transactional
 public class AdminService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    
+    @Autowired
+    private RolRepository rolRepository;
 
-    public List<Usuario> findAll() {
+    // Listar todos los usuarios
+    public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
-
-    }
-    public Usuario crearUsuario(String nombre, String email, String contrasena) {
-    if (usuarioRepository.existsByEmailUsuario(email)) {
-        throw new RuntimeException("El email ya está en uso");
-    }
-    Usuario nuevo = new Usuario();
-    nuevo.setNom_usuario(nombre);
-    nuevo.setEmailUsuario(email);
-    nuevo.setContraseña_usuario(contrasena); 
-    nuevo.setActivo(true);
-    return usuarioRepository.save(nuevo);
-    
-}
-    public Usuario findById(Long id) {
-        return usuarioRepository.findById(id).orElse(null);
     }
 
-    public Usuario save(Usuario usuario) {
+
+    // Crear un nuevo usuario con rol
+    public Usuario crearUsuarioConRol(Usuario usuario, String nombreRol) {
+        if (usuarioRepository.existsByCorreo(usuario.getCorreo())) {
+            throw new RuntimeException("El correo ya está en uso");
+        }
+        Rol rol = rolRepository.findByNombreRol(nombreRol);
+        if (rol == null) {
+            throw new RuntimeException("Rol no encontrado");
+        }
+        usuario.getRoles().add(rol);
+        usuario.setActivo(true);
         return usuarioRepository.save(usuario);
     }
-    public void desactivarActivarUsuario(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
+
+    // Actualizar usuario existente
+    public Usuario actualizarUsuario(Long idUsuario, Usuario usuarioActualizado) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        usuario.setActivo(!usuario.isActivo());
-        usuarioRepository.save(usuario);
+        usuario.setNombreUsuario(usuarioActualizado.getNombreUsuario());
+        usuario.setApellidoUsuario(usuarioActualizado.getApellidoUsuario());
+        usuario.setCorreo(usuarioActualizado.getCorreo());
+        usuario.setContrasena(usuarioActualizado.getContrasena());
+        usuario.setDirUsuario(usuarioActualizado.getDirUsuario());
+        usuario.setMetodoPago(usuarioActualizado.getMetodoPago());
+        return usuarioRepository.save(usuario);
     }
 
-    public void eliminarUsuario(Long id) {
-        usuarioRepository.deleteById(id);
-}
+    // Activar o desactivar usuario
+    public Usuario cambiarEstadoUsuario(Long idUsuario, boolean activo) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        usuario.setActivo(activo);
+        return usuarioRepository.save(usuario);
+    }
 
-    public String findRolByid_rol(Long id_rol) {
-        // Aquí se implementaría la lógica para buscar el rol por su ID
-        // Por ahora, retornamos un mensaje de ejemplo
-        return "Rol encontrado con ID: " + id_rol;
+    // Eliminar usuario
+    public void eliminarUsuario(Long idUsuario) {
+        if (!usuarioRepository.existsById(idUsuario)) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        usuarioRepository.deleteById(idUsuario);
     }
 }

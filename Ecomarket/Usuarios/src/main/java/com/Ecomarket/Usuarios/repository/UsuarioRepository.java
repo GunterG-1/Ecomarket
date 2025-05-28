@@ -11,6 +11,6 @@ import com.Ecomarket.Usuarios.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
         List<Usuario> findAll();   
-        Optional<Usuario> findByEmailUsuario(String email_usuario);
-    boolean existsByEmailUsuario(String email_usuario);
+        Optional<Usuario> findByCorreo(String correo);
+    boolean existsByCorreo(String correo);
 }

@@ -7,6 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
 @Entity
 @Table(name = "solicitudes_soporte")
 @Data
@@ -16,20 +20,21 @@ public class SolicitudSoporte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idSolicitud;
 
-    @Column(unique = true,length = 200,nullable = false)
+    @Column(length = 200,nullable = false)
     private String asunto;
     
-    @Column(unique = true,length = 200,nullable = false)
+    @Column(length = 200,nullable = false)
     private String mensaje;
 
     @Column(nullable = true)
-    private String fechaSolicSoporte;
+    @Temporal(TemporalType.DATE) // Solo la fecha, sin hora
+    private Date fechaSolicitud; // Fecha y hora de la solicitud;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Usuario cliente;
+    @JoinColumn(name = "idUsuario")
+    private Usuario usuario;
 
     private String estado; // Ej: "Enviado", "Atendido"
 }

@@ -1,9 +1,14 @@
 package com.Ecomarket.Usuarios.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "rol")
@@ -16,12 +21,17 @@ public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_rol;
+    private Long idRol;
 
     @Column
-    private String nombre_rol; 
+    private String nombreRol; 
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario") 
-    private Usuario usuario;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "rolUsuario",
+        joinColumns = @JoinColumn(name = "idRol"),
+        inverseJoinColumns = @JoinColumn(name = "idUsuario")
+    )
+    private Set<Usuario> usuarios = new LinkedHashSet<>();
 }

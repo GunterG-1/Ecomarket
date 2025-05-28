@@ -1,8 +1,11 @@
 package com.Ecomarket.Usuarios.model;
 
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,34 +17,42 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idUsuario;
 
-    @Column(unique = false,length = 25,nullable = false)
-    private String nom_usuario;
+    @Column(unique = false, length = 25, nullable = false)
+    private String nombreUsuario;
 
-    @Column(unique = false,length = 25,nullable = false)
-    private String ap_usuario; 
+    @Column(unique = false, length = 25, nullable = false)
+    private String apellidoUsuario; 
 
-    @Column(unique = true,length = 50,nullable = false)
-    private String emailUsuario;
+    @Column(unique = true, length = 50, nullable = false)
+    private String correo;
 
-    @Column(unique = false,length = 25,nullable = false)
-    private String contraseña_usuario;
+    @Column(unique = false, length = 25, nullable = false)
+    private String contrasena;
 
-    @Column(unique = true,length = 50,nullable = false) 
-    private String dir_usuario;
+    @Column(length = 50, nullable = false) 
+    private String dirUsuario;
 
     private String metodoPago;
 
     private boolean activo = true;
 
-    @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Rol> roles = new LinkedHashSet<>();
+    @JsonIgnore
+    @ManyToMany(mappedBy = "usuarios")
+    private Set<Rol> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Devolucion> devoluciones;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Reclamacion> reclamaciones;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<SolicitudSoporte> solicitudesSoporte;
 
 }

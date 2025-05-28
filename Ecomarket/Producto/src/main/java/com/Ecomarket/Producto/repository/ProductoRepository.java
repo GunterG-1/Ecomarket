@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.Ecomarket.Producto.model.Producto;
 
 @Repository
-public interface ProductoRepository extends JpaRepository <Producto, Long> {
-    boolean existsByCodigo(int codigo);
-
+public interface ProductoRepository extends JpaRepository<Producto, Long> {
+    boolean existsByCodigo(String codigo);
 }

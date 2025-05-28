@@ -7,4 +7,5 @@ import com.Ecomarket.Usuarios.model.Rol;
 
 @Repository
 public interface RolRepository extends JpaRepository<Rol,Long>{
+	Rol findByNombreRol(String nombreRol);
 }

@@ -1,9 +1,9 @@
 package com.Ecomarket.Producto.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,66 +11,64 @@ import com.Ecomarket.Producto.model.Producto;
 import com.Ecomarket.Producto.service.ProductoService;
 
 @RestController
-@RequestMapping("/api/v1/productos")
+@RequestMapping("/api/productos")
 public class ProductoController {
-    @Autowired ProductoService productoService;
 
+    @Autowired
+    private ProductoService productoService;
+
+    // Listar todos los productos
     @GetMapping
-    public ResponseEntity<List<Producto>> listar(){
-        List<Producto> productos = productoService.listaProductos();
-        if (productos.isEmpty()) {
-            return ResponseEntity.noContent().build(); 
-        }
-        return ResponseEntity.ok(productos);
+    public List<Producto> listarProductos() {
+        return productoService.listarProductos();
     }
 
+    // Buscar producto por ID
+    @GetMapping("/{idProducto}")
+    public ResponseEntity<Producto> obtenerProducto(@PathVariable Long idProducto) {
+        Optional<Producto> producto = productoService.findById(idProducto);
+        return producto.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Agregar producto
     @PostMapping
-    public ResponseEntity<Producto>Guardar(@RequestBody Producto producto) {
-        Producto productoNuevo = productoService.save(producto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(productoNuevo);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Producto> buscar (@RequestParam Long id) {
+    public ResponseEntity<Producto> agregarProducto(@RequestBody Producto producto) {
         try {
-            Producto producto = productoService.FindById(id);
-            return ResponseEntity.ok(producto);
-        } catch (Exception e ){
-            return ResponseEntity.notFound().build();
+            Producto nuevo = productoService.agregarProducto(producto);
+            return ResponseEntity.status(201).body(nuevo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Producto producto){
+    // Actualizar stock de un producto
+    @PutMapping("/{idProducto}/actualizarStock")
+    public ResponseEntity<Void> actualizarStock(
+            @PathVariable Long idProducto,
+            @RequestParam int cantidadVendida) {
         try {
-            Producto pro =  productoService.FindById(id);
-            pro.setId(id);
-            pro.setNombreProducto(producto.getNombreProducto());
-            pro.setCodigo(producto.getCodigo());
-            pro.setDescripcionProducto(producto.getDescripcionProducto());
-            pro.setPreciUnitario(producto.getPreciUnitario());
-            pro.setStock(producto.getStock());
-            pro.setCategoria(producto.getCategoria());
-
-            productoService.save(pro);
-            return ResponseEntity.ok(producto);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            productoService.actualizarStock(idProducto, cantidadVendida);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
+    // Actualizar producto
+    @PutMapping("/{idProducto}")
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable Long idProducto, @RequestBody Producto productoActualizado) {
         try {
-            productoService.delete(id);
-            return ResponseEntity.noContent().build();
-
-        } catch (Exception e){
+            Producto actualizado = productoService.actualizarProducto(idProducto, productoActualizado);
+            return ResponseEntity.ok(actualizado);
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    
-    
-
+    // Eliminar producto
+    @DeleteMapping("/{idProducto}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long idProducto) {
+        productoService.eliminarProducto(idProducto);
+        return ResponseEntity.noContent().build();
+    }
 }

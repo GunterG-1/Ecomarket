@@ -1,43 +1,59 @@
 package com.Ecomarket.Venta.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.Ecomarket.Venta.model.Venta;
 import com.Ecomarket.Venta.service.VentaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/ventas")
+@RequestMapping("/api/ventas")
 public class VentaController {
 
     @Autowired
     private VentaService ventaService;
 
+    // Listar todas las ventas
     @GetMapping
-    public ResponseEntity<List<Venta>> listar(){
-        List<Venta> ventas = ventaService.listarVentas();
-        if(ventas.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(ventas);
+    public List<Venta> listarVentas() {
+        return ventaService.listarVentas();
     }
 
-
-    @PostMapping
-    public ResponseEntity<Venta> registrarVenta(@RequestBody Venta venta, @RequestParam(required = false)String codigo){
-        try{
-            Venta nuevaVenta = ventaService.registrarVenta(venta, codigo);
-            return ResponseEntity.ok(nuevaVenta);
-        }catch(Exception e){
+    // Registrar una venta (con o sin cupón)
+    @PostMapping("/registrarVenta")
+    public ResponseEntity<Venta> registrarVenta(
+            @RequestBody Venta venta,
+            @RequestParam(value = "codigo", required = false) String codigo) {
+        try {
+            Venta ventaGuardada = ventaService.registrarVenta(venta, codigo);
+            return ResponseEntity.status(201).body(ventaGuardada);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-    }    
+    }
+
+    // Buscar venta por id
+    @GetMapping("/{idVenta}")
+    public ResponseEntity<Venta> obtenerVenta(@PathVariable Long idVenta) {
+        Venta venta = ventaService.obtenerVentaPorId(idVenta);
+        if (venta != null) {
+            return ResponseEntity.ok(venta);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Buscar ventas por correo
+    @GetMapping("/correo/{correo}")
+    public List<Venta> buscarPorCorreo(@PathVariable String correo) {
+        return ventaService.buscarPorCorreo(correo);
+    }
+
+    // Buscar ventas por nombre de usuario
+    @GetMapping("/usuario/{nombreUsuario}")
+    public List<Venta> buscarPorNombreUsuario(@PathVariable String nombreUsuario) {
+        return ventaService.buscarPorNombreUsuario(nombreUsuario);
+    }
 }
