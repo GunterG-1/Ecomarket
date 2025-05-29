@@ -55,8 +55,8 @@ public class VentaController {
     public ResponseEntity<Venta> actualizarVenta(@PathVariable Long id, @RequestBody Venta venta) {
         try {
             Venta v = ventaService.findById(id);
-            v.setNom_usuario(venta.getNom_usuario());
-            v.setEmail(venta.getEmail());
+            v.setNomUsuario(venta.getNomUsuario());
+            v.setCorreo(venta.getCorreo());
             v.setDetalle(venta.getDetalle());
             v.setTotal(venta.getTotal());
             v.setFechaVenta(venta.getFechaVenta());

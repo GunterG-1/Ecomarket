@@ -38,7 +38,7 @@ public class EnvioController {
         return envioService.buscarPorDestino(destino);
     }
 
-    @PostMapping
+    @PostMapping("/nuevoEnvio")
     public Envio crearEnvio(@RequestBody Envio envio) {
         return envioService.save(envio);
     }

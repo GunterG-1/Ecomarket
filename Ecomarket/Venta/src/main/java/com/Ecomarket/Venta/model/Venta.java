@@ -20,7 +20,7 @@ public class Venta {
     private Long id;
 
     @Column(unique=true, length= 25 , nullable = false) 
-    private String nom_usuario;
+    private String nomUsuario;
 
     @Column( nullable = true)
     private String fechaVenta;
@@ -29,7 +29,7 @@ public class Venta {
     private BigDecimal total;
 
     @Column(nullable = false)
-    private String email;
+    private String correo;
     
     @ManyToOne
     @JoinColumn(name ="codigo")
