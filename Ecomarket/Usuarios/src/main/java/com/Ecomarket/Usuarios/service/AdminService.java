@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class AdminService {
@@ -66,4 +68,8 @@ public class AdminService {
         }
         usuarioRepository.deleteById(idUsuario);
     }
+      public Optional<Usuario> buscarPorId(Long idUsuario) {
+        return usuarioRepository.findById(idUsuario);
+    }
 }
+

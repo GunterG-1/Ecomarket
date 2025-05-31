@@ -82,4 +82,10 @@ public class AdminController {
             return ResponseEntity.notFound().build();
         }
     }
+     @GetMapping("/{idUsuario}")
+    public ResponseEntity<Usuario> obtenerPorId(@PathVariable Long idUsuario) {
+        return adminService.buscarPorId(idUsuario)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

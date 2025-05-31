@@ -11,5 +11,5 @@ import com.Ecomarket.Usuarios.model.SolicitudSoporte;
 @Repository
 public interface SolicitudSoporteRepository extends JpaRepository<SolicitudSoporte, Long> {
     List<SolicitudSoporte> findByUsuarioIdUsuario(Long idUsuario);
-    Optional<SolicitudSoporte> findById(Long idSolicitudSoporte);
+    Optional<SolicitudSoporte> findByIdSolicitud(Long idSolicitud);
 }

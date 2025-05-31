@@ -30,16 +30,15 @@ private String nombreUsuario;
 @Column(length = 25, nullable = false)
 private String apellidoUsuario;
 
-@Column(length = 100, nullable = true)
-private String dirUsuario;
-
 @Column(length = 50, nullable = false, unique = true)
 private String correo;
 
 @Column(length = 20, nullable = false)
 private String estado; 
 
-@Column(length = 20, nullable = false)
+private Long idVenta;
+
+@Column(length = 100, nullable = false)
 private String destino;
 
 @Column(nullable = true)
@@ -48,6 +47,6 @@ private LocalDate fechaEnvio;
 @Column(nullable = true)
 private LocalDate fechaEntregaEstimada;
 
-@Column(length = 50, nullable = false)
-private String nombreProducto;
+@Column(length = 300)
+private String ResumenProductos;
 }

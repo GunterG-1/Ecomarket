@@ -10,5 +10,5 @@ import com.Ecomarket.Usuarios.model.Reclamacion;
 @Repository
 public interface ReclamacionRepository extends JpaRepository<Reclamacion, Long> {
     List<Reclamacion> findByUsuarioIdUsuario(Long idUsuario);
-    Optional<Reclamacion> findById(Long idReclamacion);
+    Optional<Reclamacion> findByIdReclamacion(Long idReclamacion);
 }

@@ -52,4 +52,6 @@ public class UsuarioController {
                 .findFirst();
         return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+
 }

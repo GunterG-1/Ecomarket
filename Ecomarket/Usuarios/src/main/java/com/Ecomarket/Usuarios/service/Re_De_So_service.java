@@ -40,7 +40,7 @@ public class Re_De_So_service {
 
     public Devolucion crearDevolucion(Devolucion devolucion) {
         // Obtener el nombre del producto desde el microservicio de productos
-        ProductoDTO producto = productoClient.obtenerProductoPorId(devolucion.getIdProducto());
+        ProductoDTO producto = productoClient.obtenerProducto(devolucion.getIdProducto());
         if (producto != null) {
             devolucion.setNombreProducto(producto.getNombreProducto());
         }
@@ -57,7 +57,7 @@ public class Re_De_So_service {
         dev.setEstado(nuevaDevolucion.getEstado());
 
         // Actualizar el nombre del producto si cambió el idProducto
-        ProductoDTO producto = productoClient.obtenerProductoPorId(nuevaDevolucion.getIdProducto());
+        ProductoDTO producto = productoClient.obtenerProducto(nuevaDevolucion.getIdProducto());
         if (producto != null) {
             dev.setNombreProducto(producto.getNombreProducto());
         }

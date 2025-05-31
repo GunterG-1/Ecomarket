@@ -1,6 +1,8 @@
 package com.Ecomarket.Venta.client;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,9 +13,11 @@ public class ProductoClient {
     @Autowired
     private RestTemplate restTemplate;
 
-    public ProductoDTO obtenerProductoPorId(Long idProducto) {
-        String url = "http://localhost:8082/api/productos/" + idProducto;
-        return restTemplate.getForObject(url, ProductoDTO.class);
+    public ProductoDTO obtenerProducto(Long idProducto) {
+        String url = "http://localhost:8082/api/productos/{idProducto}";
+        Map<String, Long> params = new HashMap<>();
+        params.put("idProducto", idProducto);
+        return restTemplate.getForObject(url, ProductoDTO.class, params);
     }
      public void actualizarStock(Long idProducto, int cantidadVendida) {
         String url = "http://localhost:8082/api/productos/" + idProducto + "/actualizarStock?cantidadVendida=" + cantidadVendida;
@@ -29,7 +33,7 @@ public class ProductoClient {
         private BigDecimal precioUnitario;
         private int stock;
 
-        public Long setIdProducto() { return idProducto; }
+        public Long getIdProducto() { return idProducto; }
         public void setIdProducto(Long idProducto) { this.idProducto = idProducto; }
 
         public String getNombreProducto() { return nombreProducto; }

@@ -33,16 +33,18 @@ public class EnvioController {
         return envioService.buscarPorEstado(estado);
     }
 
-    @GetMapping("/destino/{destino}")
-    public List<Envio> buscarPorDestino(@PathVariable String destino) {
-        return envioService.buscarPorDestino(destino);
-    }
 
-    @PostMapping("/nuevoEnvio")
-    public Envio crearEnvio(@RequestBody Envio envio) {
-        return envioService.save(envio);
+    @PostMapping("/crearEnvio")
+    public ResponseEntity<Envio> crearEnvio(@RequestBody Envio envio) {
+        try{
+            Envio envioNuevo = envioService.crearEnvio(envio);
+            return ResponseEntity.ok(envioNuevo);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
-
+    
     @PutMapping("/{idEnvio}")
     public ResponseEntity<Envio> actualizarEnvio(@PathVariable Long idEnvio, @RequestBody Envio envio) {
         Envio existente = envioService.findById(idEnvio);

@@ -15,7 +15,7 @@ public class Reclamacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idReclamos;
+    private Long idReclamacion;
 
     @Column(length = 100, nullable = false)
     private String asunto;
