@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.Ecomarket.Logistica.client.DetalleVentaClient.DetalleVentaDTO;
+
+
 @Component
 public class VentaClient {
 
@@ -28,7 +31,8 @@ public class VentaClient {
         private String apellidoUsuario;
         private String correo;
         private String dirUsuario;
-        private List<DetalleVentaDTO> detalles;
+
+        private List<DetalleVentaDTO> detalle;
 
         public String getNombreUsuario() { return nombreUsuario; }
         public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
@@ -42,46 +46,13 @@ public class VentaClient {
         public String getDirUsuario() { return dirUsuario; }
         public void setDirUsuario(String dirUsuario) { this.dirUsuario = dirUsuario; }
 
-
         public List<DetalleVentaDTO> getDetalles() {
-            return detalles;
+            return detalle;
         }
-        public void setDetalles(List<DetalleVentaDTO> detalles) {
-            this.detalles = detalles;
+        public void setDetalle(List<DetalleVentaDTO> detalle) {
+            this.detalle = detalle;
         }
 
-        // DTO interno para detalles
-        public static class DetalleVentaDTO {
-            private String nombreProducto;
-            private Long idProducto;
-            private Integer cantidad;
-
-            // Getters y setters
-
-
-            public Long getIdProducto(){
-                return idProducto;
-            } 
-            public void setIdProducto(Long idProducto){
-                this.idProducto = idProducto;
-            }
-
-
-            public String getNombreProducto() {
-                return nombreProducto;
-            }
-            public void setNombreProducto(String nombreProducto) {
-                this.nombreProducto = nombreProducto;
-            }
-
-            public Integer getCantidad() {
-                return cantidad;
-            }
-            public void setCantidad(Integer cantidad) {
-                this.cantidad = cantidad;
-            }
-        }
-    }
 }
-
+}
 

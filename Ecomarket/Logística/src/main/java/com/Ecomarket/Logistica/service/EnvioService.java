@@ -2,6 +2,7 @@ package com.Ecomarket.Logistica.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Ecomarket.Logistica.client.VentaClient;
+import com.Ecomarket.Logistica.client.DetalleVentaClient.DetalleVentaDTO;
 import com.Ecomarket.Logistica.client.VentaClient.VentaDTO;
 import com.Ecomarket.Logistica.model.Envio;
 import com.Ecomarket.Logistica.repository.EnvioRepository;
@@ -45,19 +47,20 @@ public class EnvioService {
     envio.setFechaEnvio(LocalDate.now());
     envio.setFechaEntregaEstimada(LocalDate.now().plusDays(3)); 
 
-    //corregir no trae un resumen!
-    if (venta.getDetalles() != null && !venta.getDetalles().isEmpty()) {
-        String resumen = venta.getDetalles().stream()
+    List<DetalleVentaDTO> detalle =venta.getDetalles();
+    if (detalle!= null && !detalle.isEmpty()) {
+        String resumen = detalle.stream()
+            .filter(Objects::nonNull)
             .map(d -> {
         Long id = d.getIdProducto() != null ? d.getIdProducto() : 0L;
         String nombre = d.getNombreProducto() != null ? d.getNombreProducto() : "Sin nombre";
         Integer cantidad = d.getCantidad() != null ? d.getCantidad() : 0;
         return "ID:" + id + " - " + nombre + " x " + cantidad;
              }) .collect(Collectors.joining(", "));
-        envio.setResumenProductos(resumen.isEmpty()? "sin producto":resumen);
+        envio.setResumenPedido(resumen.isEmpty()? "sin producto":resumen);
     } else {
-        envio.setResumenProductos("Sin productos");
-    }
+        envio.setResumenPedido("Sin productos");
+    } 
 
     return envioRepository.save(envio);
 }

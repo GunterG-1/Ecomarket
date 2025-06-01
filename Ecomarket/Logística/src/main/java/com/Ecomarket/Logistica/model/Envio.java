@@ -48,5 +48,5 @@ private LocalDate fechaEnvio;
 private LocalDate fechaEntregaEstimada;
 
 @Column(length = 300)
-private String ResumenProductos;
+private String ResumenPedido;
 }
