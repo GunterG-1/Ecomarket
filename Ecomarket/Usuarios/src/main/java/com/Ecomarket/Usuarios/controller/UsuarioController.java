@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -28,9 +29,11 @@ public class UsuarioController {
 
     // Login
     @PostMapping("/login")
-    public ResponseEntity<Usuario> login(@RequestParam String correo, @RequestParam String contrasena) {
-        Optional<Usuario> usuario = usuarioService.login(correo, contrasena);
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(401).build());
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+        String correo = body.get("correo");
+        String contrasena = body.get("contrasena");
+        Usuario usuario = usuarioService.login(correo, contrasena);
+        return ResponseEntity.ok(usuario);
     }
 
     // Actualizar usuario

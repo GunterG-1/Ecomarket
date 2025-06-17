@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -50,9 +51,11 @@ public class Usuario {
     private List<Devolucion> devoluciones;
 
     @OneToMany(mappedBy = "usuario")
+    @JsonManagedReference
     private List<Reclamacion> reclamaciones;
 
     @OneToMany(mappedBy = "usuario")
+    @JsonManagedReference
     private List<SolicitudSoporte> solicitudesSoporte;
 
 

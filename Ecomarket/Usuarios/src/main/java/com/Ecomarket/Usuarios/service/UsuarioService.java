@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class UsuarioService {
@@ -38,17 +38,13 @@ public class UsuarioService {
         usuario.setContrasena(usuarioActualizado.getContrasena());
         usuario.setDirUsuario(usuarioActualizado.getDirUsuario());
         usuario.setMetodoPago(usuarioActualizado.getMetodoPago());
-        usuario.setActivo(usuarioActualizado.isActivo());
         return usuarioRepository.save(usuario);
     }
 
     // Login (autenticación simple)
-    public Optional<Usuario> login(String correo, String contrasena) {
-        Optional<Usuario> usuario = usuarioRepository.findByCorreo(correo);
-        if (usuario.isPresent() && usuario.get().getContrasena().equals(contrasena)) {
-            return usuario;
-        }
-        return Optional.empty();
+    public Usuario login(String correo, String contrasena) {
+        return usuarioRepository.findByCorreoAndContrasena(correo, contrasena)
+                .orElse(null);
     }
    
 

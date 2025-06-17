@@ -28,12 +28,7 @@ public class EnvioController {
         return envio.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/estado/{estado}")
-    public List<Envio> buscarPorEstado(@PathVariable String estado) {
-        return envioService.buscarPorEstado(estado);
-    }
-
-
+    
     @PostMapping("/crearEnvio")
     public ResponseEntity<Envio> crearEnvio(@RequestBody Envio envio) {
         try{
@@ -45,14 +40,14 @@ public class EnvioController {
         }
     }
     
-    @PutMapping("/{idEnvio}")
+    @PutMapping("/actualizar/{idEnvio}")
     public ResponseEntity<Envio> actualizarEnvio(@PathVariable Long idEnvio, @RequestBody Envio envio) {
-        Envio existente = envioService.findById(idEnvio);
-        if (existente == null) {
+        try {
+            Envio actualizado = envioService.actualizarEnvio(idEnvio, envio);
+            return ResponseEntity.ok(actualizado);
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
-        envio.setIdEnvio(idEnvio);
-        return ResponseEntity.ok(envioService.save(envio));
     }
 
     @DeleteMapping("/{idEnvio}")

@@ -52,7 +52,7 @@ public class VentaController {
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{idVenta}")
+    @PutMapping("/actualizar/{idVenta}")
     public ResponseEntity<Venta> actualizarVenta(@PathVariable Long idVenta, @RequestBody Venta ventaActualizada) {
         try {
             Venta actualizado = ventaService.actualizarVenta(idVenta, ventaActualizada);
@@ -62,7 +62,7 @@ public class VentaController {
     }
 }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idVenta}")
     public ResponseEntity<Void> eliminarVenta(@PathVariable Long idVenta) {
         if (ventaService.findById(idVenta).isPresent()) {
             ventaService.delete(idVenta);

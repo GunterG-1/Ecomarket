@@ -21,7 +21,7 @@ public class Envio {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long idEnvio;
 
-@Column(length = 25, nullable = false)
+@Column(length = 100, nullable = false)
 private String origen;
 
 @Column(length = 25, nullable = false)

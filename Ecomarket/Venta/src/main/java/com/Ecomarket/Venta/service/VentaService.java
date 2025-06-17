@@ -18,7 +18,7 @@ import com.Ecomarket.Venta.model.DetalleVenta;
 import com.Ecomarket.Venta.model.Venta;
 
 import com.Ecomarket.Venta.repository.VentaRepository;
-import com.Ecomarket.Venta.repository.DetalleVentaRepository;
+
 
 import jakarta.transaction.Transactional;
 
@@ -35,8 +35,7 @@ public class VentaService {
     @Autowired
     private UsuarioClient usuarioClient;
 
-    @Autowired
-    private DetalleVentaRepository detalleVentaRepository;
+    
 
    
 
@@ -47,7 +46,7 @@ public class VentaService {
     public Venta registrarVenta(Venta venta) {
         // Obtener datos del usuario
         UsuarioDTO usuario = usuarioClient.obtenerPorId(venta.getIdUsuario());
-         System.out.println("Datos usuario obtenidos: " + usuario);
+        
         venta.setNombreUsuario(usuario.getNombreUsuario());
         venta.setApellidoUsuario(usuario.getApellidoUsuario());
         venta.setCorreo(usuario.getCorreo());
@@ -74,7 +73,7 @@ public class VentaService {
             // Actualizar stock del producto
         for (DetalleVenta d : venta.getDetalle()) {
         productoClient.actualizarStock(d.getIdProducto(), d.getCantidad());
-        System.out.println("Stock actualizado para producto ID: " + d.getIdProducto());
+        
     }
         
     return ventaGuardada;
@@ -85,15 +84,24 @@ public class VentaService {
     public Optional<Venta> findById(Long idVenta){
         return ventaRepository.findById(idVenta);
     }
-    public Venta actualizarVenta(Long idVenta, Venta ventaActualizada){
+    public Venta actualizarVenta(Long idVenta, Venta ventaActualizada) {
         Venta venta = ventaRepository.findById(idVenta)
-                .orElseThrow(() -> new RuntimeException("venta no encontrado"));
-        venta.setNombreUsuario(ventaActualizada.getNombreUsuario());
-        venta.setApellidoUsuario(ventaActualizada.getApellidoUsuario());
-        venta.setCorreo(ventaActualizada.getCorreo());
-        venta.setDirUsuario(ventaActualizada.getDirUsuario());
-        venta.setFechaVenta(ventaActualizada.getFechaVenta());
-        venta.setDetalle(ventaActualizada.getDetalle());
+                .orElseThrow(() -> new RuntimeException("venta no encontrada"));
+
+        for (int i = 0; i < venta.getDetalle().size(); i++) {
+            DetalleVenta detalleExistente = venta.getDetalle().get(i);
+            DetalleVenta detalleNuevo = ventaActualizada.getDetalle().get(i);
+
+            // 1. Revertir el stock anterior
+            productoClient.actualizarStock(detalleExistente.getIdProducto(), -detalleExistente.getCantidad());
+
+            // 2. Actualizar los datos del detalle
+            detalleExistente.setIdProducto(detalleNuevo.getIdProducto());
+            detalleExistente.setCantidad(detalleNuevo.getCantidad());
+
+            // 3. Aplicar el nuevo descuento de stock
+            productoClient.actualizarStock(detalleExistente.getIdProducto(), detalleExistente.getCantidad());
+        }
 
         return ventaRepository.save(venta);
     }

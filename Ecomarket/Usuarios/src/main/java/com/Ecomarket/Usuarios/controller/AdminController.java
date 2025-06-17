@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/usuarios")
@@ -61,15 +62,12 @@ public class AdminController {
 
     // Activar o desactivar usuario
     @PutMapping("/{idUsuario}/estado")
-    public ResponseEntity<Usuario> cambiarEstadoUsuario(
-            @PathVariable("idUsuario") Long idUsuario,
-            @RequestParam boolean activo) {
-        try {
-            Usuario usuario = adminService.cambiarEstadoUsuario(idUsuario, activo);
-            return ResponseEntity.ok(usuario);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> cambiarEstadoUsuario(
+            @PathVariable Long idUsuario,
+            @RequestBody Map<String, Boolean> body) {
+        boolean activo = body.get("activo");
+        adminService.cambiarEstadoUsuario(idUsuario, activo);
+        return ResponseEntity.ok().build();
     }
 
     // Eliminar usuario

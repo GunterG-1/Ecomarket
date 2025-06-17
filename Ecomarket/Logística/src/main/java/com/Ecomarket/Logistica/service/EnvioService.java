@@ -65,13 +65,26 @@ public class EnvioService {
     return envioRepository.save(envio);
 }
 
-    public List<Envio> buscarPorEstado(String estado) {
-        return envioRepository.findByEstado(estado);
-    }
+   
+   public Envio actualizarEnvio(Long idEnvio, Envio envioActualizado) {
+    Envio envio = envioRepository.findById(idEnvio)
+            .orElseThrow(() -> new RuntimeException("Envío no encontrado"));
 
-    public Envio findById(Long idVenta) {
-        return envioRepository.findById(idVenta).orElse(null);
+    // Actualiza solo los campos que vienen en envioActualizado (puedes agregar más si lo necesitas)
+    if (envioActualizado.getOrigen() != null) {
+        envio.setOrigen(envioActualizado.getOrigen());
     }
+    if (envioActualizado.getEstado() != null) {
+        envio.setEstado(envioActualizado.getEstado());
+    }
+    if (envioActualizado.getFechaEntregaEstimada() != null) {
+        envio.setFechaEntregaEstimada(envioActualizado.getFechaEntregaEstimada());
+    }
+    
+    
+
+    return envioRepository.save(envio);
+}
 
     public Envio save(Envio envio) {
         envio.setFechaEnvio(LocalDate.now());

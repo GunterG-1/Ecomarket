@@ -32,7 +32,7 @@ public class ProductoController {
     }
 
     // Agregar producto
-    @PostMapping
+    @PostMapping("/crearProducto")
     public ResponseEntity<Producto> agregarProducto(@RequestBody Producto producto) {
         try {
             Producto nuevo = productoService.agregarProducto(producto);
@@ -55,7 +55,7 @@ public class ProductoController {
     }
 
     // Actualizar producto
-    @PutMapping("/{idProducto}")
+    @PutMapping("/actualizar/{idProducto}")
     public ResponseEntity<Producto> actualizarProducto(@PathVariable Long idProducto, @RequestBody Producto productoActualizado) {
         try {
             Producto actualizado = productoService.actualizarProducto(idProducto, productoActualizado);

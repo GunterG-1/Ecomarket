@@ -6,6 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Date;
 
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+
+
+
+
+
 @Entity
 @Table(name = "reclamacion")
 @Data
@@ -27,8 +35,12 @@ public class Reclamacion {
     @Temporal(TemporalType.DATE) // Solo guarda la fecha, sin hora
     private Date fechaReclamo;
 
+    
+
+    
     @ManyToOne
     @JoinColumn(name = "idUsuario")
+    @JsonBackReference
     private Usuario usuario;
 
     private String estado;

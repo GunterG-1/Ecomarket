@@ -1,5 +1,6 @@
 package com.Ecomarket.Usuarios.controller;
 
+import com.Ecomarket.Usuarios.dto.DevolucionResponseDTO;
 import com.Ecomarket.Usuarios.model.Devolucion;
 import com.Ecomarket.Usuarios.model.Reclamacion;
 import com.Ecomarket.Usuarios.model.SolicitudSoporte;
@@ -24,11 +25,12 @@ public class Re_De_So_Controller {
     }
 
     @PostMapping("/crear/devoluciones")
-    public ResponseEntity<Devolucion> crearDevolucion(@RequestBody Devolucion devolucion) {
-        return ResponseEntity.ok(service.crearDevolucion(devolucion));
+    public ResponseEntity<DevolucionResponseDTO> crearDevolucion(@RequestBody Devolucion devolucion) {
+        DevolucionResponseDTO response = service.crearDevolucion(devolucion);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/devoluciones/{idDevolucion}")
+    @PutMapping("/devo/actulaizar/{idDevolucion}")
     public ResponseEntity<Devolucion> actualizarDevolucion(@PathVariable("idDevolucion") Long idDevolucion, @RequestBody Devolucion nueva) {
         return ResponseEntity.ok(service.actualizarDevolucion(idDevolucion, nueva));
     }
@@ -50,7 +52,7 @@ public class Re_De_So_Controller {
         return ResponseEntity.ok(service.crearReclamacion(reclamacion));
     }
 
-    @PutMapping("/reclamaciones/{idReclamos}")
+    @PutMapping("/recla/actualizar/{idReclamos}")
     public ResponseEntity<Reclamacion> actualizarReclamacion(@PathVariable("idReclamos") Long idReclamos, @RequestBody Reclamacion nueva) {
         return ResponseEntity.ok(service.actualizarReclamacion(idReclamos, nueva));
     }
@@ -67,12 +69,12 @@ public class Re_De_So_Controller {
         return service.listarSolicitudesSoporte();
     }
 
-    @PostMapping("/soporte")
+    @PostMapping("/crear/soporte")
     public ResponseEntity<SolicitudSoporte> crearSolicitudSoporte(@RequestBody SolicitudSoporte solicitud) {
         return ResponseEntity.ok(service.crearSolicitudSoporte(solicitud));
     }
 
-    @PutMapping("/soporte/{idSolicitud}")
+    @PutMapping("/soporte/actualizar/{idSolicitud}")
     public ResponseEntity<SolicitudSoporte> actualizarSolicitudSoporte(@PathVariable("idSolicitud") Long idSolicitud, @RequestBody SolicitudSoporte nueva) {
         return ResponseEntity.ok(service.actualizarSolicitudSoporte(idSolicitud, nueva));
     }

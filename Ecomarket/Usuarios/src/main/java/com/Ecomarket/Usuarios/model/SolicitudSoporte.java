@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
@@ -34,6 +37,7 @@ public class SolicitudSoporte {
 
     @ManyToOne
     @JoinColumn(name = "idUsuario")
+    @JsonBackReference
     private Usuario usuario;
 
     private String estado; // Ej: "Enviado", "Atendido"
