@@ -21,14 +21,6 @@ public class Devolucion {
     
     private Long idVenta;
 
-    private String nombreUsuario;
-    
-    private String apellidoUsuario;
-    
-    private String correo;
-    
-    private String dirUsuario;
-    
     private Long idProducto;
     
     private String nombreProducto; 

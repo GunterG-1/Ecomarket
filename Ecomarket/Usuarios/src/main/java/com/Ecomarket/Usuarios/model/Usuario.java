@@ -36,7 +36,7 @@ public class Usuario {
     @Column(unique = false, length = 25, nullable = false)
     private String contrasena;
 
-    @Column(length = 50, nullable = false) 
+    @Column(length = 200, nullable = false) 
     private String dirUsuario;
 
     private String metodoPago;

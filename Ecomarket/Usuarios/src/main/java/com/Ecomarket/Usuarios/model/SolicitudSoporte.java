@@ -28,7 +28,7 @@ public class SolicitudSoporte {
     @Column(length = 200,nullable = false)
     private String asunto;
     
-    @Column(length = 200,nullable = false)
+    @Column(length = 300,nullable = false)
     private String mensaje;
 
     @Column(nullable = true)

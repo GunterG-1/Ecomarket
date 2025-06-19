@@ -14,7 +14,7 @@ import com.Ecomarket.Usuarios.client.VentaCliente;
 import com.Ecomarket.Usuarios.client.VentaCliente.VentaDTO;
 import com.Ecomarket.Usuarios.dto.DevolucionResponseDTO;
 import com.Ecomarket.Usuarios.dto.ProductoDevolucionDTO;
-import com.Ecomarket.Usuarios.dto.UsuarioDevolucionDTO;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,21 +73,10 @@ public class Re_De_So_service {
     if (detalleSeleccionado == null) throw new RuntimeException("Producto no encontrado en la venta");
     
 
-   UsuarioDevolucionDTO usuarioDTO = new UsuarioDevolucionDTO();
-   usuarioDTO.setIdUsuario(venta.getIdUsuario()); 
-    usuarioDTO.setNombreUsuario(venta.getNombreUsuario());
-    usuarioDTO.setApellidoUsuario(venta.getApellidoUsuario());
-    usuarioDTO.setCorreo(venta.getCorreo());
-    usuarioDTO.setDirUsuario(venta.getDirUsuario());
-
     ProductoDevolucionDTO productoDTO = new ProductoDevolucionDTO();
     productoDTO.setIdProducto(detalleSeleccionado.getIdProducto());
     productoDTO.setNombreProducto(detalleSeleccionado.getNombreProducto());
 
-    devolucion.setNombreUsuario(venta.getNombreUsuario());
-    devolucion.setApellidoUsuario(venta.getApellidoUsuario());
-    devolucion.setCorreo(venta.getCorreo());
-    devolucion.setDirUsuario(venta.getDirUsuario());
     devolucion.setFechaDevolucion(new Date());
     devolucion.setIdProducto(detalleSeleccionado.getIdProducto());
     devolucion.setNombreProducto(detalleSeleccionado.getNombreProducto());
@@ -100,7 +89,6 @@ public class Re_De_So_service {
     DevolucionResponseDTO response = new DevolucionResponseDTO();
     response.setIdDevolucion(saved.getIdDevolucion());
     response.setIdVenta(saved.getIdVenta());
-    response.setUsuario(usuarioDTO);
     response.setProducto(productoDTO);
     response.setCantidad(saved.getCantidad());
     response.setMotivo(saved.getMotivo());

@@ -19,6 +19,11 @@ public class UsuarioClient {
         params.put("idUsuario", idUsuario);
         return restTemplate.getForObject(url, UsuarioDTO.class, params);
     }
+    public UsuarioDTO[] obtenerTodos() {
+        String url = "http://localhost:8081/admin/usuarios/listar";
+        return restTemplate.getForObject(url, UsuarioDTO[].class);
+    }
+
 
     // DTO interno para recibir datos del microservicio Usuario
     public static class UsuarioDTO {

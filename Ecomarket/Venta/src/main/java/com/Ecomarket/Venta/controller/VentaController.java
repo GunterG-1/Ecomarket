@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Ecomarket.Venta.model.Venta;
+import com.Ecomarket.Venta.repository.VentaRepository;
 import com.Ecomarket.Venta.service.VentaService;
 
 @RestController
@@ -23,6 +24,8 @@ public class VentaController {
 
     @Autowired
     private VentaService ventaService;
+    @Autowired
+    private VentaRepository ventaRepository;
 
     @GetMapping
     public ResponseEntity<List<Venta>> listar(){
@@ -70,5 +73,9 @@ public class VentaController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/usuario/{idUsuario}")
+    public List<Venta> obtenerVentasPorUsuario(@PathVariable Long idUsuario) {
+        return ventaRepository.findByIdUsuario(idUsuario);
     }
 }

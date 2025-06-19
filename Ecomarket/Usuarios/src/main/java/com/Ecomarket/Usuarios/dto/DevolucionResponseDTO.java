@@ -9,7 +9,6 @@ public class DevolucionResponseDTO {
     private Long idDevolucion;
     private Long idVenta;
     
-    private UsuarioDevolucionDTO usuario;
     private ProductoDevolucionDTO producto;
     private int cantidad;
     private String motivo;

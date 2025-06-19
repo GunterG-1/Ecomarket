@@ -23,10 +23,14 @@ public class VentaClient {
         params.put("idVenta", idVenta);
         return restTemplate.getForObject(url, VentaDTO.class,params);
     }
+    public VentaDTO[] obtenerTodasLasVentas() {
+        String url = "http://localhost:8083/api/ventas"; // Ajusta el puerto/ruta si es necesario
+        return restTemplate.getForObject(url, VentaDTO[].class);
+    }
 
     // DTO interno para recibir datos del microservicio Venta
     public static class VentaDTO {
-
+        private Long idVenta;
         private String nombreUsuario;
         private String apellidoUsuario;
         private String correo;
@@ -34,6 +38,8 @@ public class VentaClient {
 
         private List<DetalleVentaDTO> detalle;
 
+        public Long getIdVenta() { return idVenta; }
+        public void setIdVenta(Long idVenta) { this.idVenta = idVenta; }
         public String getNombreUsuario() { return nombreUsuario; }
         public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
 

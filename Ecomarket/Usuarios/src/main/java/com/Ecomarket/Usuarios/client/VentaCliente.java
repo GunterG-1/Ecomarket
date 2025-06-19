@@ -1,5 +1,6 @@
 package com.Ecomarket.Usuarios.client;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.Ecomarket.Usuarios.client.DetalleVentaClient.DetalleVentaDTO;
+
 
 @Component
 public class VentaCliente {
@@ -22,9 +24,17 @@ public class VentaCliente {
         params.put("idVenta", idVenta);
         return restTemplate.getForObject(url, VentaDTO.class,params);
     }
+    public List<VentaDTO> obtenerVentasPorUsuario(Long idUsuario) {
+        String url = "http://localhost:8083/api/ventas/usuario/{idUsuario}";
+        Map<String, Long> params = new HashMap<>();
+        params.put("idUsuario", idUsuario);
+        VentaDTO[] ventas = restTemplate.getForObject(url, VentaDTO[].class, params);
+        return ventas != null ? Arrays.asList(ventas) : List.of();
 
+    }
     // DTO interno para recibir datos del microservicio Venta
     public static class VentaDTO {
+        private Long idVenta;
         private Long idUsuario;
         private String nombreUsuario;
         private String apellidoUsuario;
@@ -33,6 +43,8 @@ public class VentaCliente {
 
         private List<DetalleVentaDTO> detalle;
 
+        public Long getIdVenta() { return idVenta; }
+        public void setIdVenta(Long idVenta) { this.idVenta = idVenta; }
         public Long getIdUsuario() { return idUsuario; }
         public void setIdUsuario(Long idUsuario) { this.idUsuario = idUsuario; }
         

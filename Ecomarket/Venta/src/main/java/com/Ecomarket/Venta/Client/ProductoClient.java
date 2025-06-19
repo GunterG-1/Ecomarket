@@ -23,6 +23,11 @@ public class ProductoClient {
         String url = "http://localhost:8082/api/productos/" + idProducto + "/actualizarStock?cantidadVendida=" + cantidadVendida;
         restTemplate.put(url, null);
     }
+    // Nuevo método para obtener todos los productos
+    public ProductoDTO[] obtenerTodos() {
+        String url = "http://localhost:8082/api/productos";
+        return restTemplate.getForObject(url, ProductoDTO[].class);
+    }
     
 
 
