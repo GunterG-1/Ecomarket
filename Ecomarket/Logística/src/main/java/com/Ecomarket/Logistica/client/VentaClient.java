@@ -24,7 +24,7 @@ public class VentaClient {
         return restTemplate.getForObject(url, VentaDTO.class,params);
     }
     public VentaDTO[] obtenerTodasLasVentas() {
-        String url = "http://localhost:8083/api/ventas"; // Ajusta el puerto/ruta si es necesario
+        String url = "http://localhost:8083/api/ventas"; 
         return restTemplate.getForObject(url, VentaDTO[].class);
     }
 

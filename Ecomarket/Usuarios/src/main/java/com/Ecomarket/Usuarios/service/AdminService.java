@@ -71,5 +71,14 @@ public class AdminService {
       public Optional<Usuario> buscarPorId(Long idUsuario) {
         return usuarioRepository.findById(idUsuario);
     }
+
+    public List<Usuario> listarUsuariosActivos() {
+        return usuarioRepository.findByActivoTrue();
+    }
+
+    public List<Usuario> listarUsuariosDesactivados() {
+        return usuarioRepository.findByActivoFalse();
+    }
+
 }
 

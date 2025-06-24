@@ -50,7 +50,7 @@ public class ProductoService {
         return productoRepository.save(producto);
     }
 
-    // ...existing code...
+    
 
     // Actualizar stock restando la cantidad vendida
     public void actualizarStock(Long idProducto, int cantidadVendida) {
@@ -63,7 +63,7 @@ public class ProductoService {
         productoRepository.save(producto);
     }
 
-// ...existing code...
+
    
     // Eliminar producto
     public void eliminarProducto(Long idProducto) {

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.*;
 
 @Profile("dev")
@@ -53,19 +54,50 @@ public class DataLoader implements CommandLineRunner {
             usuario.setMetodoPago(faker.business().creditCardType());
             usuario.setActivo(faker.bool().bool());
             usuario.setRoles(new HashSet<>());
-            usuario.getRoles().add(roles.get(random.nextInt(roles.size())));
+            if (!roles.isEmpty()) {
+        usuario.getRoles().add(roles.get(random.nextInt(roles.size())));}
             usuarioRepository.save(usuario);
             usuariosCreados.add(usuario);
         }
 
-        // Crear devoluciones SOLO para usuarios con ventas existentes
-        for (Usuario usuario : usuariosCreados) {
-            List<VentaCliente.VentaDTO> ventas = ventaCliente.obtenerVentasPorUsuario(usuario.getIdUsuario());
-            if (ventas == null || ventas.isEmpty()) continue;
+        File flagFile = new File("devoluciones-creadas.flag");
+    if (!flagFile.exists()) {
+        // Primera vez: solo crea el archivo, no generes devoluciones
+        flagFile.createNewFile();
+        System.out.println("Primera ejecución: NO se crean devoluciones.");
+    } else {
+        // Segunda vez (o más): ejecuta la lógica de devoluciones
+        System.out.println("Reinicio detectado: SE CREAN devoluciones.");
 
-            for (VentaCliente.VentaDTO venta : ventas) {
+        List<Usuario> listaUsuarios = usuarioRepository.findAll();
+        // Obtener usuarios con al menos una venta
+        List<Usuario> usuariosConVentas = new ArrayList<>();
+        for (Usuario usuario : listaUsuarios) {
+            List<VentaCliente.VentaDTO> ventas = ventaCliente.obtenerVentasPorUsuario(usuario.getIdUsuario());
+            if (ventas != null && !ventas.isEmpty()) {
+                usuariosConVentas.add(usuario);
+            }
+        }
+
+        // Selecciona aleatoriamente usuarios para devoluciones
+         int cantidadDevoluciones = 3; // Cambia este valor según lo que necesites
+        Collections.shuffle(usuariosConVentas);
+        List<Usuario> usuariosSeleccionados = usuariosConVentas.subList(0, Math.min(cantidadDevoluciones, usuariosConVentas.size()));
+
+        for (Usuario usuario : usuariosSeleccionados) {
+            try {
+                List<VentaCliente.VentaDTO> ventas = ventaCliente.obtenerVentasPorUsuario(usuario.getIdUsuario());
+                if (ventas == null || ventas.isEmpty()) continue;
+
+                // Puedes elegir una venta aleatoria o la primera
+                VentaCliente.VentaDTO venta = ventas.get(0);
                 if (venta.getDetalles() == null || venta.getDetalles().isEmpty()) continue;
                 DetalleVentaClient.DetalleVentaDTO detalle = venta.getDetalles().get(0);
+
+                boolean existe = devolucionRepository.existsByUsuarioAndIdVentaAndIdProducto(
+                    usuario, venta.getIdVenta(), detalle.getIdProducto()
+                );
+                if (existe) continue;
 
                 Devolucion devolucion = new Devolucion();
                 devolucion.setIdVenta(venta.getIdVenta());
@@ -77,14 +109,19 @@ public class DataLoader implements CommandLineRunner {
                 devolucion.setEstado(faker.options().option("Pendiente", "Procesada"));
                 devolucion.setUsuario(usuario);
                 devolucionRepository.save(devolucion);
+
+            } catch (Exception e) {
+                System.err.println("Error al procesar devoluciones para el usuario ID: " + usuario.getIdUsuario() + " - " + e.getMessage());
             }
         }
 
         // Crear reclamaciones
         List<Reclamacion> reclamacionesCreadas = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        List<Usuario> usuariosDisponibles = usuarioRepository.findAll();
+        if (!usuariosDisponibles.isEmpty()) {
+        for (int i = 0; i < 3; i++) {
             Reclamacion reclamacion = new Reclamacion();
-            Usuario usuario = usuariosCreados.get(random.nextInt(usuariosCreados.size()));
+            Usuario usuario = usuariosDisponibles.get(random.nextInt(usuariosCreados.size()));
             reclamacion.setUsuario(usuario);
             reclamacion.setAsunto(faker.lorem().sentence());
             String mensaje = faker.lorem().paragraph();
@@ -94,10 +131,14 @@ public class DataLoader implements CommandLineRunner {
             reclamacionRepository.save(reclamacion);
             reclamacionesCreadas.add(reclamacion);
         }
+        } else {
+            System.out.println("No hay usuarios disponibles para crear reclamaciones.");
+        }
 
         // Crear solicitudes de soporte
         List<SolicitudSoporte> soportesCreados = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+         if (!usuariosDisponibles.isEmpty()) {
+        for (int i = 0; i < 3; i++) {
             SolicitudSoporte soporte = new SolicitudSoporte();
             Usuario usuario = usuariosCreados.get(random.nextInt(usuariosCreados.size()));
             soporte.setUsuario(usuario);
@@ -108,6 +149,9 @@ public class DataLoader implements CommandLineRunner {
             soporte.setEstado(faker.options().option("Enviado", "Atendido"));
             solicitudSoporteRepository.save(soporte);
             soportesCreados.add(soporte);
+        }
+        } else {
+            System.out.println("No hay usuarios disponibles para crear solicitudes de soporte.");
         }
 
         // Imprimir datos generados para usar en otros microservicios
@@ -172,4 +216,6 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 }
+}
+
 

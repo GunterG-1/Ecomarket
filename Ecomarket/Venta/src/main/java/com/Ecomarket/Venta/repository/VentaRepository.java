@@ -8,5 +8,6 @@ import com.Ecomarket.Venta.model.Venta;
 
 public interface VentaRepository extends JpaRepository <Venta, Long>{
 List<Venta> findByIdUsuario(Long idUsuario);
+boolean existsByIdUsuario(Long idUsuario);
 
 }

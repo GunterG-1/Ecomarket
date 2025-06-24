@@ -86,4 +86,16 @@ public class AdminController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    
+
+    @GetMapping("/listar-activos")
+public List<Usuario> listarUsuariosActivos() {
+    return adminService.listarUsuariosActivos();
+}
+
+@GetMapping("/listar-desactivados")
+public List<Usuario> listarUsuariosDesactivados() {
+    return adminService.listarUsuariosDesactivados();
+}
+
 }

@@ -20,7 +20,7 @@ public class UsuarioClient {
         return restTemplate.getForObject(url, UsuarioDTO.class, params);
     }
     public UsuarioDTO[] obtenerTodos() {
-        String url = "http://localhost:8081/admin/usuarios/listar";
+        String url = "http://localhost:8081/api/admin/usuarios/listar";
         return restTemplate.getForObject(url, UsuarioDTO[].class);
     }
 
@@ -32,6 +32,8 @@ public class UsuarioClient {
         private String apellidoUsuario;
         private String correo;
         private String dirUsuario;
+        private Boolean activo;
+
 
         public Long getIdUsuario() { return idUsuario; }
         public void setIdUsuario(Long idUsuario) { this.idUsuario = idUsuario; }
@@ -47,5 +49,8 @@ public class UsuarioClient {
 
         public String getDirUsuario() { return dirUsuario; }
         public void setDirUsuario(String dirUsuario) { this.dirUsuario = dirUsuario; }
+
+        public Boolean getActivo() { return activo; }
+        public void setActivo(Boolean activo) { this.activo = activo; }
     }
 }

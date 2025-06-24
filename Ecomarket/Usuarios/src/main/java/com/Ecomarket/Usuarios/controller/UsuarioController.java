@@ -55,6 +55,12 @@ public class UsuarioController {
                 .findFirst();
         return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    @PostMapping("/solo-admin")
+public ResponseEntity<?> soloAdmin(@RequestBody Usuario usuario, @RequestHeader String rol) {
+    if (!"ADMINISTRADOR".equals(rol)) {
+        return ResponseEntity.status(403).body("No autorizado");
+    }
+    return ResponseEntity.ok("Acceso permitido");
+}
 
 }

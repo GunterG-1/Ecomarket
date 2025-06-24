@@ -38,10 +38,12 @@ public class DataLoader implements CommandLineRunner {
         ProductoClient.ProductoDTO[] productos = productoClient.obtenerTodos();
         
         List<Venta> ventasCreadas = new ArrayList<>();
-
+        
         for (UsuarioClient.UsuarioDTO usuario : usuarios) {
             if (usuario == null) continue; // Si el usuario no existe, salta
-
+            if (usuario.getActivo() == null || !usuario.getActivo()) continue; 
+            if (ventaRepository.existsByIdUsuario(usuario.getIdUsuario())) continue;
+            
             Venta venta = new Venta();
             venta.setIdUsuario(usuario.getIdUsuario());
             venta.setNombreUsuario(usuario.getNombreUsuario());
